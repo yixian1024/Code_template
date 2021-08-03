@@ -8,13 +8,10 @@ pipeline {
                 sh """
                     yum install git -y
                     yum install wget -y
-                    yum install squashfs-tools -y
-                    yum install mkisofs -y
                     yum install python3 -y
         			python3 --version
-        			pip3 install wget
-        			pip3 install shortuuid
         			pip3 install pyyaml
+				pip3 install git
         			pip3 list
 		        """
             }
@@ -23,18 +20,18 @@ pipeline {
             steps {
                 git branch: 'master',
                     credentialsId: 'gitlab',
-                    url: 'http://10.102.49.26:8098/ironman/quick_assemble_kit.git'
+                    url: 'http://localhost/code_template.git'
                     
             }
         }
         stage('Build Quick Assemble Kit') {
             steps {
-                sh "python3 bundle_manager.py"
+                sh "python3 main.py"
             }
         }
         stage('Return') {
             steps {
-                archiveArtifacts artifacts: '*.iso' 
+                archiveArtifacts artifacts: 'text.txt' 
             }
         }
     }
